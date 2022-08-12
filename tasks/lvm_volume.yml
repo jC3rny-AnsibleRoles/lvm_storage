@@ -1,0 +1,13 @@
+---
+# [ lvm_storage - tasks/lvm_volume.yml ]
+
+- include_vars: "./roles/lvm_volume/defaults/main.yml"
+  run_once: yes
+  tags: [ set-lvm_lvol, get-lvm_lvol_preview, remove-lvm_lvol ]
+
+- include_vars: "{{ lvm_storage_vars_file.path }}"
+  run_once: yes
+  tags: [ set-lvm_lvol, get-lvm_lvol_preview, remove-lvm_lvol ]
+
+- include_role: name="lvm_volume"
+  tags: [ set-lvm_lvol, get-lvm_lvol_preview, remove-lvm_lvol ]

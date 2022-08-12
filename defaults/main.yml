@@ -1,0 +1,5 @@
+---
+# [ lvm_storage - defaults ]
+
+lvm_storage_vars_files_path: "./storage_vars"
+lvm_storage_vars_file_find_patterns: []

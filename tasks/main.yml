@@ -1,0 +1,30 @@
+---
+# [ lvm_storage - tasks  ]
+
+- name: Check mandatory variables
+  assert:
+    that:
+      - lvm_storage_vars_file_find_patterns != []
+    quiet: true
+    msg: "Mandatory variables have to be defined!"
+  run_once: yes
+  tags: [ set-lvm_lvol, get-lvm_lvol_preview, remove-lvm_lvol ]
+
+
+- name: Get storage vars
+  find:
+    paths: "{{ lvm_storage_vars_files_path }}"
+    file_type: file
+    use_regex: yes
+    patterns: "{{ lvm_storage_vars_file_find_patterns }}"
+  register: lvm_storage_vars
+  become: no
+  delegate_to: localhost
+  tags: [ set-lvm_lvol, get-lvm_lvol_preview, remove-lvm_lvol ]
+
+- include_tasks:
+    file: "roles/{{ role_name }}/tasks/lvm_volume.yml"
+  with_items: "{{ lvm_storage_vars.files }}"
+  loop_control:
+    loop_var: lvm_storage_vars_file
+  tags: [ set-lvm_lvol, get-lvm_lvol_preview, remove-lvm_lvol ]
