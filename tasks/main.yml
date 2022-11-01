@@ -11,6 +11,15 @@
   tags: [ set-lvm_lvol, get-lvm_lvol_preview, remove-lvm_lvol ]
 
 
+# Install LVM packages
+- name: Install LVM packages
+  package:
+    name: "{{ lvm_packages }}"
+    state: present
+  notify: daemon-reload
+  tags: [ install-lvm_packages ]
+
+
 - name: Get storage vars
   find:
     paths: "{{ lvm_storage_vars_files_path }}"
