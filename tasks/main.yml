@@ -2,36 +2,37 @@
 # [ lvm_storage - tasks  ]
 
 - name: Check mandatory variables
-  assert:
+  ansible.builtin.assert:
     that:
       - lvm_storage_vars_file_find_patterns != []
     quiet: true
     msg: "Mandatory variables have to be defined!"
-  run_once: yes
+  run_once: false
   tags: [ set-lvm_lvol, get-lvm_lvol_preview, remove-lvm_lvol ]
 
 
 # Install LVM packages
 - name: Install LVM packages
-  package:
+  ansible.builtin.package:
     name: "{{ lvm_packages }}"
     state: present
   notify: daemon-reload
   tags: [ install-lvm_packages ]
 
 
+# Get storage vars
 - name: Get storage vars
-  find:
+  ansible.builtin.find:
     paths: "{{ lvm_storage_vars_files_path }}"
     file_type: file
-    use_regex: yes
+    use_regex: true
     patterns: "{{ lvm_storage_vars_file_find_patterns }}"
   register: lvm_storage_vars
-  become: no
+  become: false
   delegate_to: localhost
   tags: [ set-lvm_lvol, get-lvm_lvol_preview, remove-lvm_lvol ]
 
-- include_tasks:
+- ansible.builtin.include_tasks:
     file: "roles/{{ role_name }}/tasks/lvm_volume.yml"
   with_items: "{{ lvm_storage_vars.files }}"
   loop_control:
