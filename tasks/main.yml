@@ -20,6 +20,19 @@
   tags: [ install-lvm_packages ]
 
 
+# List block devices
+- block:
+    - name: List block devices
+      ansible.builtin.command: lsblk
+      register: sys_lsblk
+      changed_when: false
+
+    - ansible.builtin.debug:
+        msg: "{{ sys_lsblk.stdout_lines }}"
+
+  tags: [ never, list-lvm_sys_block_devices ]
+
+
 # Get storage vars
 - name: Get storage vars
   ansible.builtin.find:
